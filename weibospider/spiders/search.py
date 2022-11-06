@@ -22,9 +22,10 @@ class SearchSpider(Spider):
         爬虫入口
         """
         # 这里keywords可替换成实际待采集的数据
-        keywords = ['丽江']
-        start_time = "2022-10-01-0"  # 格式为 年-月-日-小时, 2022-10-01-0 表示2022年10月1日0时
-        end_time = "2022-10-07-23"  # 格式为 年-月-日-小时, 2022-10-07-23 表示2022年10月7日23时
+        keywords = ['官老爷', '食税阶级', '利益集团', '垄断阶级', '砖家', '叫兽', '学阀', '公知', '底层屁民',
+                    '特权阶级', '上升通道堵死']
+        start_time = "2021-11-06-0"
+        end_time = "2022-11-06-0"
         is_search_with_specific_time_scope = True  # 是否在指定的时间区间进行推文搜索
         for keyword in keywords:
             if is_search_with_specific_time_scope:
@@ -47,14 +48,35 @@ class SearchSpider(Spider):
             url = "https://s.weibo.com" + next_page.group(1)
             yield Request(url, callback=self.parse, meta=response.meta)
 
-    @staticmethod
-    def parse_tweet(response):
+    def parse_tweet(self, response):
         """
         解析推文
         """
         data = json.loads(response.text)
         item = parse_tweet_info(data)
         item['keyword'] = response.meta['keyword']
+        url = f"https://weibo.com/ajax/profile/detail?uid={item['user']['_id']}"
+        yield Request(url, callback=self.parse_detail, meta={'item': item})
+
+    @staticmethod
+    def parse_detail(response):
+        """
+        解析详细数据
+        """
+        item = response.meta['item']
+        data = json.loads(response.text)['data']
+        item['user']['birthday'] = data.get('birthday', '')
+        if 'created_at' not in item:
+            item['created_at'] = data.get('created_at', '')
+        item['user']['desc_text'] = data.get('desc_text', '')
+        item['user']['ip_location'] = data.get('ip_location', '')
+        item['user']['sunshine_credit'] = data.get('sunshine_credit', {}).get('level', '')
+        item['user']['label_desc'] = [label['name'] for label in data.get('label_desc', [])]
+        if 'company' in data:
+            item['user']['company'] = data['company']
+        if 'education' in data:
+            item['user']['education'] = data['education']
+
         if item['isLongText']:
             url = "https://weibo.com/ajax/statuses/longtext?id=" + item['mblogid']
             yield Request(url, callback=parse_long_tweet, meta={'item': item})
