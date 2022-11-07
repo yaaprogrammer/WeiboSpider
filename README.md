@@ -37,6 +37,7 @@
     <p>持续维护的新浪微博采集工具🚀🚀🚀</p>
 </h4>
 
+为了方便收集数据，基于关键词搜索时获取微博作者的详细信息
 
 ## 项目特色
 
@@ -318,13 +319,17 @@ python run_spider.py search
   ],
   "pic_num": 9,
   "user": {
-    "_id": "1259570181",
-    "avatar_hd": "https://tvax1.sinaimg.cn/crop.0.0.1080.1080.1024/4b138405ly8gzfkfikyqvj20u00u0ag1.jpg?KID=imgbed,tva&Expires=1666879848&ssig=6PUDG5RonQ",
-    "nick_name": "飞鸟与鱼",
-    "verified": true,
-    "mbrank": 7,
+   "_id": "5464089644", 
+    "avatar_hd": "https://tvax3.sinaimg.cn/crop.0.0.667.667.1024/005XMLk8ly8h79r24v6daj30ij0ijgm5.jpg?KID=imgbed,tva&Expires=1667712361&ssig=LZYdnE4oxW",
+    "nick_name": "未断乳笼里狗",
+    "verified": false,
+    "mbrank": 3,
     "mbtype": 12,
-    "verified_type": 0
+    "birthday": " ",
+    "desc_text": "",
+    "ip_location": "IP属地：中国香港", 
+    "sunshine_credit": "信用较好", 
+    "label_desc": []
   },
   "url": "https://weibo.com/1259570181/Mch46rqPr"
 }
@@ -333,6 +338,7 @@ python run_spider.py search
 
 ## 更新日志
 
+- 2022.11.7: 基于关键词搜索时获取微博作者的详细信息
 - 2022.11: 支持长微博全文的获取
 - 2022.11: 基于关键词微博搜索支持指定时间范围
 - 2022.10: 添加IP归属地信息的采集，包括用户数据，微博数据和微博评论数据
